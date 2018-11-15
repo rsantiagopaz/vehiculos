@@ -25,13 +25,17 @@ qx.Class.define("vehiculos.comp.windowParametro",
 	
 	var functionActualizarTaller = function(cod_razon_social) {
 		var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Parametros");
-		rpc.callAsync(function(resultado, error, id) {
-			tableModelTaller.setDataAsMapArray(resultado, true);
+		rpc.addListener("completed", function(e){
+			var data = e.getData();
+
+			tableModelTaller.setDataAsMapArray(data.result, true);
 			
 			//alert(qx.lang.Json.stringify(resultado, null, 2));
 			
 			if (cod_razon_social != null) tblTaller.buscar("cod_razon_social", cod_razon_social);
-		}, "leer_taller");
+		}, this);
+		rpc.callAsyncListeners(true, "leer_taller");
+		
 	};
 	
 	
@@ -55,13 +59,17 @@ qx.Class.define("vehiculos.comp.windowParametro",
 			p.cod_razon_social = lstProveed.getSelection()[0].getModel();
 			
 			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Parametros");
-			rpc.callAsync(function(resultado, error, id) {
+			rpc.addListener("completed", function(e){
+				var data = e.getData();
+	
 				cboProveed.resetValue();
 				lstProveed.removeAll();
 				functionActualizarTaller(p.cod_razon_social);
 				
 				cboProveed.focus();
-			}, "agregar_taller", p);
+			}, this);
+			rpc.callAsyncListeners(true, "agregar_taller", p);
+
 		}
 	});
 	gbxTaller.add(btnAgregarTaller, {left: 50, top: 30});

@@ -27,11 +27,17 @@ qx.Class.define("vehiculos.comp.windowParque",
 	
 	var functionActualizarTaller = function(id_parque) {
 		var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Parametros");
-		rpc.callAsync(function(resultado, error, id) {
-			tableModelTaller.setDataAsMapArray(resultado, true);
+		rpc.addListener("completed", function(e){
+			var data = e.getData();
+
+			tableModelTaller.setDataAsMapArray(data.result, true);
 			
 			if (id_parque != null) tblTaller.buscar("id_parque", id_parque);
-		}, "leer_parque");
+		}, this);
+		rpc.callAsyncListeners(true, "leer_parque");
+		
+		
+		
 	};
 	
 	
@@ -61,14 +67,18 @@ qx.Class.define("vehiculos.comp.windowParque",
 			p = qx.util.Serializer.toNativeObject(controllerFormInfoVehiculo.getModel());
 			
 			var rpc = new qx.io.remote.Rpc("services/", "comp.Parametros");
-			rpc.callAsync(function(resultado, error, id) {
+			rpc.addListener("completed", function(e){
+				var data = e.getData();
+	
 				txtDescrip.setValue("");
 				cboDependencia.setValue("");
 				lstDependencia.removeAll();
 				txtDescrip.focus();
 				
-				functionActualizarTaller(resultado);
-			}, "agregar_parque", p);
+				functionActualizarTaller(data.result);
+			}, this);
+			rpc.callAsyncListeners(true, "agregar_parque", p);
+			
 		} else {
 			formInfoVehiculo.getValidationManager().getInvalidFormItems()[0].focus();
 		}

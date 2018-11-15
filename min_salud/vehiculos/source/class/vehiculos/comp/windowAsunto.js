@@ -61,28 +61,33 @@ qx.Class.define("vehiculos.comp.windowAsunto",
 		p.documentacion_id = txtAsunto.getValue();
 		
 		var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
-		rpc.callAsync(qx.lang.Function.bind(function(resultado, error, id) {
-			if (error == null) {
-				txtAsunto.setValid(true);
+		rpc.addListener("completed", function(e){
+			var data = e.getData();
+
+			txtAsunto.setValid(true);
+			
+			txtDocumento.setValue(data.result.documento);
+			txtIniciador.setValue(data.result.documentacion_tmp_iniciador);
+			txtTexto.setValue(data.result.documentacion_asunto);
+		}, this);
+		rpc.addListener("failed", function(e){
+			var data = e.getData();
+			
+			txtDocumento.setValue("");
+			txtIniciador.setValue("");
+			txtTexto.setValue("");
+			
+			if (data.message = "documentacion_id") {
+				txtAsunto.setValid(false);
+				txtAsunto.focus();
 				
-				txtDocumento.setValue(resultado.documento);
-				txtIniciador.setValue(resultado.documentacion_tmp_iniciador);
-				txtTexto.setValue(resultado.documentacion_asunto);				
-			} else {
-				txtDocumento.setValue("");
-				txtIniciador.setValue("");
-				txtTexto.setValue("");
-				
-				if (error.message = "documentacion_id") {
-					txtAsunto.setValid(false);
-					txtAsunto.focus();
-					
-					sharedErrorTooltip.setLabel("Asunto inválido");
-					sharedErrorTooltip.placeToWidget(txtAsunto);
-					sharedErrorTooltip.show();
-				}
+				sharedErrorTooltip.setLabel("Asunto inválido");
+				sharedErrorTooltip.placeToWidget(txtAsunto);
+				sharedErrorTooltip.show();
 			}
-		}, this), "leer_asunto", p);
+		}, this);
+		rpc.callAsyncListeners(true, "leer_asunto", p);
+		
 	});
 	this.add(btnBuscar, {left: 250, top: 0});
 	

@@ -82,11 +82,14 @@ qx.Class.define("vehiculos.comp.windowIncidente",
 			//alert(qx.lang.Json.stringify(p, null, 2));
 			
 			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Chofer");
-			rpc.callAsync(qx.lang.Function.bind(function(resultado, error, id) {
+			rpc.addListener("completed", function(e){
+				var data = e.getData();
+
 				this.fireDataEvent("aceptado");
 				
 				btnCancelar.execute();
-			}, this), "alta_modifica_incidente", p);
+			}, this);
+			rpc.callAsyncListeners(true, "alta_modifica_incidente", p);
 			
 		} else {
 			form.getValidationManager().getInvalidFormItems()[0].focus();

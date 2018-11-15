@@ -34,8 +34,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 	
 	var functionActualizarVehiculo = function(id_vehiculo, id_entsal, id_movimiento){
 		
-		if (id_vehiculo != null) application.loading.show();
-		
 		tableModelEntsal.setDataAsMapArray([], true);
 		tableModelMovimiento.setDataAsMapArray([], true);
 		tableModelSal.setDataAsMapArray([], true);
@@ -70,8 +68,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 				if (this.rpc != null) {
 					this.rpc.abort(this.opaqueCallRef);
 					this.rpc = null;
-				} else {
-					application.loading.hide();
 				}
 			}
 			
@@ -80,9 +76,11 @@ qx.Class.define("vehiculos.comp.pageParticular",
 				var p = {};
 				p.id_vehiculo = id_vehiculo;
 				
-				this.rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+				this.rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 				this.rpc.addListener("completed", function(e){
 					var data = e.getData();
+					
+					//alert(qx.lang.Json.stringify(data, null, 2));
 					
 					vehiculo = data.result;
 					controllerFormInfoVehiculo.setModel(qx.data.marshal.Json.createModel(vehiculo));
@@ -93,10 +91,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 					
 					functionActualizarEntSal(id_entsal, id_movimiento);
 					
-					application.loading.hide();
-				});
-				this.rpc.addListener("aborted", function(e){
-					application.loading.hide();
 				});
 				
 				this.opaqueCallRef = this.rpc.callAsyncListeners(false, "leer_vehiculo", p);
@@ -107,7 +101,9 @@ qx.Class.define("vehiculos.comp.pageParticular",
 	
 	var functionActualizarEntSal = function(id_entsal, id_movimiento){
 		
-		application.loading.show();
+		tableModelEntsal.setDataAsMapArray([], true);
+		tableModelMovimiento.setDataAsMapArray([], true);
+		tableModelSal.setDataAsMapArray([], true);
 		
 		controllerFormInfoEntsal.resetModel();
 		controllerFormInfoMovimiento.resetModel();
@@ -124,8 +120,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 			if (this.rpc != null) {
 				this.rpc.abort(this.opaqueCallRef);
 				this.rpc = null;
-			} else {
-				application.loading.hide();
 			}
 		}
 		
@@ -134,9 +128,11 @@ qx.Class.define("vehiculos.comp.pageParticular",
 			var p = {};
 			p.id_vehiculo = vehiculo.id_vehiculo;
 			
-			this.rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+			this.rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 			this.rpc.addListener("completed", function(e){
 				var data = e.getData();
+				
+				//alert(qx.lang.Json.stringify(data, null, 2));
 
 				tblEntsal.setFocusedCell();
 				tableModelEntsal.setDataAsMapArray(data.result, true);
@@ -145,11 +141,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 					tblEntsal.buscar("id_entsal", id_entsal);
 					tblEntsal.focus();
 				}
-				
-				application.loading.hide();
-			});
-			this.rpc.addListener("aborted", function(e){
-				application.loading.hide();
 			});
 			
 			this.opaqueCallRef = this.rpc.callAsyncListeners(false, "leer_entsal", p);
@@ -162,7 +153,8 @@ qx.Class.define("vehiculos.comp.pageParticular",
 	
 	var functionActualizarMovimiento = function(id_movimiento){
 		
-		application.loading.show();
+		tableModelMovimiento.setDataAsMapArray([], true);
+		tableModelSal.setDataAsMapArray([], true);
 		
 		controllerFormInfoMovimiento.resetModel();
 		controllerFormInfoSal.resetModel();
@@ -176,8 +168,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 			if (this.rpc != null) {
 				this.rpc.abort(this.opaqueCallRef);
 				this.rpc = null;
-			} else {
-				application.loading.hide();
 			}
 		}
 		
@@ -187,7 +177,7 @@ qx.Class.define("vehiculos.comp.pageParticular",
 			var p = {};
 			p.id_entsal = rowDataEntSal.id_entsal;
 			
-			this.rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+			this.rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 			this.rpc.addListener("completed", function(e){
 				var data = e.getData();
 				
@@ -209,11 +199,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 					tblMovimiento.buscar("id_movimiento", id_movimiento);
 					tblMovimiento.focus();
 				}
-				
-				application.loading.hide();
-			});
-			this.rpc.addListener("aborted", function(e){
-				application.loading.hide();
 			});
 			
 			this.opaqueCallRef = this.rpc.callAsyncListeners(false, "leer_movimiento", p);
@@ -334,7 +319,7 @@ qx.Class.define("vehiculos.comp.pageParticular",
 										p.id_entsal = rowDataEntSal.id_entsal;
 										p.entsal_estado = rowDataEntSal.estado;
 										
-										var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+										var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 										rpc.addListener("completed", function(e){
 											functionActualizarVehiculo(vehiculo.id_vehiculo, rowDataEntSal.id_entsal);
 										});
@@ -429,9 +414,15 @@ qx.Class.define("vehiculos.comp.pageParticular",
 	var tableColumnModelEntsal = tblEntsal.getTableColumnModel();
 	tableColumnModelEntsal.setColumnVisible(5, false);
 	
-	var cellrendererString = new qx.ui.table.cellrenderer.String();
-	cellrendererString.addNumericCondition("==", -1, "center", "#FF0000", null, null, "bandera_estado");
-	tableColumnModelEntsal.setDataCellRenderer(1, cellrendererString);
+	
+	var cellrendererDate = new qx.ui.table.cellrenderer.Date();
+	cellrendererDate.setDateFormat(new qx.util.format.DateFormat("y-MM-dd HH:mm:ss"));
+	tableColumnModelEntsal.setDataCellRenderer(0, cellrendererDate);
+	
+	var cellrendererDate = new qx.ui.table.cellrenderer.Date();
+	cellrendererDate.setDateFormat(new qx.util.format.DateFormat("y-MM-dd HH:mm:ss"));
+	cellrendererDate.addNumericCondition("==", -1, "center", "#FF0000", null, null, "bandera_estado");
+	tableColumnModelEntsal.setDataCellRenderer(1, cellrendererDate);
 	
 	var cellrendererDynamic = new qx.ui.table.cellrenderer.Dynamic(function(cellInfo) {
 		if (typeof cellInfo.value == "string") {
@@ -467,7 +458,7 @@ qx.Class.define("vehiculos.comp.pageParticular",
 		
 			controllerFormInfoEntsal.setModel(qx.data.marshal.Json.createModel(rowDataEntSal));
 
-			tableModelSal.setDataAsMapArray([], true);
+			//tableModelSal.setDataAsMapArray([], true);
 			
 			buscar_id_movimiento = null;
 		}
@@ -715,9 +706,14 @@ qx.Class.define("vehiculos.comp.pageParticular",
 	var tableColumnModelMovimiento = tblMovimiento.getTableColumnModel();
 	tableColumnModelMovimiento.setColumnVisible(7, false);
 	
-	var cellrendererString = new qx.ui.table.cellrenderer.String();
-	cellrendererString.addNumericCondition("==", -1, "center", "#FF0000", null, null, "bandera_estado");
-	tableColumnModelMovimiento.setDataCellRenderer(3, cellrendererString);
+	var cellrendererDate = new qx.ui.table.cellrenderer.Date();
+	cellrendererDate.setDateFormat(new qx.util.format.DateFormat("y-MM-dd HH:mm:ss"));
+	tableColumnModelMovimiento.setDataCellRenderer(2, cellrendererDate);
+	
+	var cellrendererDate = new qx.ui.table.cellrenderer.Date();
+	cellrendererDate.setDateFormat(new qx.util.format.DateFormat("y-MM-dd HH:mm:ss"));
+	cellrendererDate.addNumericCondition("==", -1, "center", "#FF0000", null, null, "bandera_estado");
+	tableColumnModelMovimiento.setDataCellRenderer(3, cellrendererDate);
 	
 	var cellrendererDynamic = new qx.ui.table.cellrenderer.Dynamic(function(cellInfo) {
 		if (typeof cellInfo.value == "string") {
@@ -748,8 +744,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 	selectionModelMovimiento.addListener("changeSelection", function(e){
 		if (! selectionModelMovimiento.isSelectionEmpty()) {
 			
-			application.loading.show();
-			
 			rowDataMovimiento = tableModelMovimiento.getRowData(tblMovimiento.getFocusedRow());
 			
 			btnAsunto.setEnabled(rowDataMovimiento.estado == "S" && rowDataMovimiento.documentacion_id == null);
@@ -770,8 +764,6 @@ qx.Class.define("vehiculos.comp.pageParticular",
 				if (this.rpc != null) {
 					this.rpc.abort(this.opaqueCallRef);
 					this.rpc = null;
-				} else {
-					application.loading.hide();
 				}
 			}
 			
@@ -780,17 +772,13 @@ qx.Class.define("vehiculos.comp.pageParticular",
 				var p = {};
 				p.id_movimiento = rowDataMovimiento.id_movimiento;
 				
-				this.rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+				this.rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 				this.rpc.addListener("completed", function(e){
 					var data = e.getData();
 					
 					tblSal.setFocusedCell();
 					tableModelSal.setDataAsMapArray(data.result, true);
-					
-					application.loading.hide();
-				});
-				this.rpc.addListener("aborted", function(e){
-					application.loading.hide();
+
 				});
 				
 				this.opaqueCallRef = this.rpc.callAsyncListeners(false, "leer_reparacion", p);
@@ -834,7 +822,7 @@ qx.Class.define("vehiculos.comp.pageParticular",
 										p.id_movimiento = rowDataMovimiento.id_movimiento;
 										p.movimiento_estado = rowDataMovimiento.estado;
 										
-										var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+										var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 										rpc.addListener("completed", function(e){
 											functionActualizarVehiculo(vehiculo.id_vehiculo, rowDataEntSal.id_entsal, rowDataMovimiento.id_movimiento);
 										});

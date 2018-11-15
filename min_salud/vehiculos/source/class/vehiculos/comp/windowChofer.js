@@ -191,24 +191,29 @@ qx.Class.define("vehiculos.comp.windowChofer",
 				p.model = qx.util.Serializer.toNativeObject(controllerForm.getModel());
 	
 				var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Chofer");
-				rpc.callAsync(qx.lang.Function.bind(function(resultado, error, id) {
-					if (error == null) {
-						validator.setValid(true);
-					} else {
-						if (error.message == "personal") {
-							txtDni.setInvalidMessage("DNI ingresado no es parte de personal");
-							txtDni.setValid(false);
-						} else if (error.message == "dni") {
-							txtDni.setInvalidMessage("DNI duplicado");
-							txtDni.setValid(false);
-						} else if (error.message == "apenom") {
-							txtApenom.setInvalidMessage("Ape.y Nom duplicado");
-							txtApenom.setValid(false);
-						}
-						
-						validator.setValid(false);
+				rpc.addListener("completed", function(e){
+					var data = e.getData();
+	
+					validator.setValid(true);
+				}, this);
+				rpc.addListener("failed", function(e){
+					var data = e.getData();
+					
+					if (data.message == "personal") {
+						txtDni.setInvalidMessage("DNI ingresado no es parte de personal");
+						txtDni.setValid(false);
+					} else if (data.message == "dni") {
+						txtDni.setInvalidMessage("DNI duplicado");
+						txtDni.setValid(false);
+					} else if (data.message == "apenom") {
+						txtApenom.setInvalidMessage("Ape.y Nom duplicado");
+						txtApenom.setValid(false);
 					}
-				}, this), "alta_modifica_chofer", p);
+					
+					validator.setValid(false);
+				}, this);
+				rpc.callAsyncListeners(true, "alta_modifica_chofer", p);
+				
 			} else validator.setValid(false);
 		}
 	));

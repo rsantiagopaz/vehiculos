@@ -159,27 +159,39 @@ qx.Class.define("vehiculos.comp.windowVehiculo",
 			p.model = qx.util.Serializer.toNativeObject(controllerFormInfoVehiculo.getModel());
 
 			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Vehiculo");
-			rpc.callAsync(qx.lang.Function.bind(function(resultado, error, id) {
-				if (error == null) {
-					if (p.model.id_vehiculo == "0") {
-						lstVehiculo.fireDataEvent("changeSelection", []);
-						txtNro_patente.focus();
-					} else {
-						cboVehiculo.setValue("");
-						lstVehiculo.removeAll();
-						cboVehiculo.focus();
-					}
-				} else {	
-					if (error.message = "duplicado") {
-						txtNro_patente.setInvalidMessage("Nro.patente duplicado");
-						txtNro_patente.setValid(false);
-						txtNro_patente.focus();
-						
-						var manager = qx.ui.tooltip.Manager.getInstance();
-						manager.showToolTip(txtNro_patente);
-					}
+			
+			rpc.addListener("completed", function(e){
+				var data = e.getData();
+
+				if (p.model.id_vehiculo == "0") {
+					lstVehiculo.fireDataEvent("changeSelection", []);
+					txtNro_patente.focus();
+				} else {
+					cboVehiculo.setValue("");
+					lstVehiculo.removeAll();
+					cboVehiculo.focus();
 				}
-			}, this), "alta_modifica_vehiculo", p);
+			}, this);
+			
+			rpc.addListener("failed", function(e){
+				var data = e.getData();
+				
+				if (data.message == "duplicado") {
+					txtNro_patente.setInvalidMessage("Nro.patente duplicado");
+					txtNro_patente.setValid(false);
+					txtNro_patente.focus();
+					
+					var manager = qx.ui.tooltip.Manager.getInstance();
+					manager.showToolTip(txtNro_patente);
+				}
+			}, this);
+			
+			rpc.callAsyncListeners(true, "alta_modifica_vehiculo", p);
+			
+			
+			
+			
+			
 		} else {
 			formInfoVehiculo.getValidationManager().getInvalidFormItems()[0].focus();
 		}

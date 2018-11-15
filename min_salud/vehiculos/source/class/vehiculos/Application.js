@@ -123,9 +123,6 @@ qx.Class.define("vehiculos.Application",
       numberformatEntero.setMinimumFractionDigits(0);
       
       
-      var loading = this.loading = new componente.comp.ui.ramon.image.Loading("vehiculos/loading66.gif");
-          
-    
       var contenedorMain = new qx.ui.container.Composite(new qx.ui.layout.Grow());
       var tabviewMain = this.tabviewMain = new qx.ui.tabview.TabView();
       

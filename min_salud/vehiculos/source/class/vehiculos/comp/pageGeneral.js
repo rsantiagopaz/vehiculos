@@ -22,7 +22,8 @@ qx.Class.define("vehiculos.comp.pageGeneral",
 		p.ver = radioGroup.getSelection()[0].getUserData("datos");
 		//alert(qx.lang.Json.stringify(p, null, 2));
 
-		var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+		var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
+		rpc.mostrar = false;
 		rpc.addListener("completed", function(e){
 			var data = e.getData();
 			
@@ -87,7 +88,7 @@ qx.Class.define("vehiculos.comp.pageGeneral",
 	
 	var mnuTaller = new qx.ui.menu.Menu();
 	
-	var rpc = new qx.io.remote.Rpc("services/", "comp.Parametros");
+	var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 	try {
 		var resultado = rpc.callSync("autocompletarTaller", {texto: ""});
 	} catch (ex) {
@@ -266,6 +267,11 @@ qx.Class.define("vehiculos.comp.pageGeneral",
 	})
 	
 	var tableColumnModelGral = tblGral.getTableColumnModel();
+	
+	var cellrendererDate = new qx.ui.table.cellrenderer.Date();
+	cellrendererDate.setDateFormat(new qx.util.format.DateFormat("y-MM-dd HH:mm:ss"));
+	tableColumnModelGral.setDataCellRenderer(2, cellrendererDate);
+	tableColumnModelGral.setDataCellRenderer(3, cellrendererDate);
 	
 	var cellrendererReplace = new qx.ui.table.cellrenderer.Replace();
 	cellrendererReplace.setReplaceMap({

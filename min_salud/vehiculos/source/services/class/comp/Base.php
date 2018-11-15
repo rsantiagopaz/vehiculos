@@ -113,6 +113,12 @@ class class_Base
   }
   
   
+  public function auditoria($sql_texto, $id, $tag) {
+	$sql = "INSERT _auditoria SET fecha=NOW(), sql_texto='" . $this->mysqli->real_escape_string($sql_texto) . "', id='" . $id . "', tag='" . $tag . "', usuario='" . $_SESSION['login']->usuario . "'";
+	$this->mysqli->query($sql);
+  }
+  
+  
   public function is_session_started() {
 	if ( php_sapi_name() !== 'cli' ) {
 		if ( version_compare(phpversion(), '5.4.0', '>=') ) {

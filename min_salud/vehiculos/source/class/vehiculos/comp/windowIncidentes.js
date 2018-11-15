@@ -47,15 +47,17 @@ qx.Class.define("vehiculos.comp.windowIncidentes",
 			p.id_chofer = lstChofer.getModelSelection().getItem(0);
 
 			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Chofer");
-			rpc.callAsync(qx.lang.Function.bind(function(resultado, error, id) {
-				for (var x in resultado) {
-					txt = new qx.ui.form.TextArea(resultado[x].descrip);
+			rpc.addListener("completed", function(e){
+				var data = e.getData();
+
+				for (var x in data.result) {
+					txt = new qx.ui.form.TextArea(data.result[x].descrip);
 					txt.setReadOnly(true);
 					txt.setDecorator("main");
 					txt.setBackgroundColor("#ffffc0");
 					
 					txt.setContextMenu(menu);
-					txt.setUserData("datos", resultado[x]);
+					txt.setUserData("datos", data.result[x]);
 					txt.addListener("contextmenu", function(e){
 						btnModificar.setEnabled(true);
 						btnModificar.setUserData("datos", this.getUserData("datos"));
@@ -65,7 +67,7 @@ qx.Class.define("vehiculos.comp.windowIncidentes",
 					
 					composite = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 					composite.setContextMenu(menu);
-					composite.setUserData("datos", resultado[x]);
+					composite.setUserData("datos", data.result[x]);
 					composite.addListener("contextmenu", function(e){
 						btnModificar.setEnabled(true);
 						btnModificar.setUserData("datos", this.getUserData("datos"));
@@ -73,19 +75,21 @@ qx.Class.define("vehiculos.comp.windowIncidentes",
 					grid.add(composite, {row: parseInt(x), column: 0});
 
 					
-					label = new qx.ui.basic.Label(dateFormat.format(resultado[x].fecha));
+					label = new qx.ui.basic.Label(dateFormat.format(data.result[x].fecha));
 					label.setRich(true);
 					composite.add(label, {height: "33%"});
 					
-					label = new qx.ui.basic.Label(resultado[x].tipo_incidente_descrip);
+					label = new qx.ui.basic.Label(data.result[x].tipo_incidente_descrip);
 					label.setRich(true);
 					composite.add(label, {height: "33%"});
 					
-					label = new qx.ui.basic.Label(resultado[x].id_usuario);
+					label = new qx.ui.basic.Label(data.result[x].id_usuario);
 					label.setRich(true);
 					composite.add(label, {height: "33%"});
 				}
-			}, this), "leer_incidentes", p);
+			}, this);
+			rpc.callAsyncListeners(true, "leer_incidentes", p);
+			
 		}
 	}, this);
 	
