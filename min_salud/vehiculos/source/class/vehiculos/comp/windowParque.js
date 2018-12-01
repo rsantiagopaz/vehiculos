@@ -26,7 +26,7 @@ qx.Class.define("vehiculos.comp.windowParque",
 	
 	
 	var functionActualizarTaller = function(id_parque) {
-		var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Parametros");
+		var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 		rpc.addListener("completed", function(e){
 			var data = e.getData();
 
@@ -66,7 +66,7 @@ qx.Class.define("vehiculos.comp.windowParque",
 			var p = {};
 			p = qx.util.Serializer.toNativeObject(controllerFormInfoVehiculo.getModel());
 			
-			var rpc = new qx.io.remote.Rpc("services/", "comp.Parametros");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 			rpc.addListener("completed", function(e){
 				var data = e.getData();
 	

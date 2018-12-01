@@ -93,7 +93,7 @@ qx.Class.define("vehiculos.comp.windowVehiculo",
 	
 
 	aux = new qx.ui.form.SelectBox();
-	var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+	var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 	try {
 		var resultado = rpc.callSync("autocompletarTipo_vehiculo", {texto: ""});
 	} catch (ex) {
@@ -158,7 +158,7 @@ qx.Class.define("vehiculos.comp.windowVehiculo",
 			var p = {};
 			p.model = qx.util.Serializer.toNativeObject(controllerFormInfoVehiculo.getModel());
 
-			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Vehiculo");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 			
 			rpc.addListener("completed", function(e){
 				var data = e.getData();

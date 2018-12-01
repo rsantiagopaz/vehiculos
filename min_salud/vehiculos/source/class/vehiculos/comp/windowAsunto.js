@@ -60,7 +60,7 @@ qx.Class.define("vehiculos.comp.windowAsunto",
 		var p = {};
 		p.documentacion_id = txtAsunto.getValue();
 		
-		var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+		var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 		rpc.addListener("completed", function(e){
 			var data = e.getData();
 
@@ -100,7 +100,7 @@ qx.Class.define("vehiculos.comp.windowAsunto",
 			p.id_movimiento = rowDataMovimiento.id_movimiento;
 			p.documentacion_id = txtAsunto.getValue();
 			
-			var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 			rpc.addListener("completed", function(e){
 				btnCancelar.execute();
 				

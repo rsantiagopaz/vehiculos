@@ -46,7 +46,7 @@ qx.Class.define("vehiculos.comp.windowIncidentes",
 			var p = {};
 			p.id_chofer = lstChofer.getModelSelection().getItem(0);
 
-			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Chofer");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Chofer");
 			rpc.addListener("completed", function(e){
 				var data = e.getData();
 

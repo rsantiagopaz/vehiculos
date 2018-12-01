@@ -93,7 +93,7 @@ qx.Class.define("vehiculos.comp.tableParametro",
 			p.tabla = tabla;
 			p.model = rowData;
 			
-			var rpc = new qx.io.remote.Rpc("services/", "comp.Parametros");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 			rpc.addListener("completed", function(e){
 				var data = e.getData();
 
@@ -157,7 +157,7 @@ qx.Class.define("vehiculos.comp.tableParametro",
 	var p = {};
 	p.tabla = tabla;
 	
-	var rpc = new qx.io.remote.Rpc("services/", "comp.Parametros");
+	var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 	rpc.addListener("completed", function(e){
 		var data = e.getData();
 

@@ -152,8 +152,11 @@ qx.Class.define("vehiculos.comp.windowLogin",
 	this.add(formView, {left: 0, top: 0});
 	
 	
-	aux = qx.data.marshal.Json.createModel({usuario: "", password: "", id_sist_perfil_usuario_oas: null}, true);
-	aux = qx.data.marshal.Json.createModel({usuario: "rsantiagopaz", password: "ramon", id_sist_perfil_usuario_oas: null}, true);
+	if (qx.core.Environment.get("qx.debug")) {
+		aux = qx.data.marshal.Json.createModel({usuario: "rsantiagopaz", password: "ramon", id_sist_perfil_usuario_oas: null}, true);
+	} else {
+		aux = qx.data.marshal.Json.createModel({usuario: "", password: "", id_sist_perfil_usuario_oas: null}, true);
+	}
 
 	controllerForm.setModel(aux);
 	

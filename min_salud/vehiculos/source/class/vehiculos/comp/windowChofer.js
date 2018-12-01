@@ -190,7 +190,7 @@ qx.Class.define("vehiculos.comp.windowChofer",
 				var p = {};
 				p.model = qx.util.Serializer.toNativeObject(controllerForm.getModel());
 	
-				var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Chofer");
+				var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Chofer");
 				rpc.addListener("completed", function(e){
 					var data = e.getData();
 	

@@ -57,7 +57,7 @@ qx.Class.define("vehiculos.comp.windowSal",
 		var p = {};
 		p.texto = parseInt(rowDataEntSal.cod_up);
 		
-		var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+		var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 		rpc.addListener("completed", function(e){
 			var data = e.getData();
 			
@@ -78,7 +78,7 @@ qx.Class.define("vehiculos.comp.windowSal",
 		p.cod_up = ((lstUnipresu.isSelectionEmpty()) ? 0 : lstUnipresu.getSelection()[0].getModel());
 		p.entsal_estado = rowDataEntSal.estado;
 		
-		var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+		var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 		rpc.addListener("completed", function(e){
 			btnCancelar.execute();
 			

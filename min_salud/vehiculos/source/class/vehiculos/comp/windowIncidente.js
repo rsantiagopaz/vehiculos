@@ -34,7 +34,7 @@ qx.Class.define("vehiculos.comp.windowIncidente",
 	var slbTipo = new qx.ui.form.SelectBox();
 	slbTipo.setMaxWidth(200);
 	
-	var rpc = new qx.io.remote.Rpc("services/", "comp.Chofer");
+	var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Chofer");
 	try {
 		var resultado = rpc.callSync("leer_tipo_incidente");
 	} catch (ex) {
@@ -81,7 +81,7 @@ qx.Class.define("vehiculos.comp.windowIncidente",
 			
 			//alert(qx.lang.Json.stringify(p, null, 2));
 			
-			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Chofer");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Chofer");
 			rpc.addListener("completed", function(e){
 				var data = e.getData();
 

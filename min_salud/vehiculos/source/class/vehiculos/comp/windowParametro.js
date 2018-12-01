@@ -24,7 +24,7 @@ qx.Class.define("vehiculos.comp.windowParametro",
 	var numberformatMontoEs2 = new qx.util.format.NumberFormat("es").set({groupingUsed: true});
 	
 	var functionActualizarTaller = function(cod_razon_social) {
-		var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Parametros");
+		var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 		rpc.addListener("completed", function(e){
 			var data = e.getData();
 
@@ -58,7 +58,7 @@ qx.Class.define("vehiculos.comp.windowParametro",
 			var p = {};
 			p.cod_razon_social = lstProveed.getSelection()[0].getModel();
 			
-			var rpc = new componente.comp.io.ramon.rpc.Rpc("services/", "comp.Parametros");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 			rpc.addListener("completed", function(e){
 				var data = e.getData();
 	

@@ -143,7 +143,7 @@ qx.Class.define("vehiculos.comp.windowListado",
 	rgpB.add(rbtB2);
 	
 	var slbTipo = new qx.ui.form.SelectBox();
-	var rpc = new qx.io.remote.Rpc("services/", "comp.Chofer");
+	var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Chofer");
 	try {
 		var resultado = rpc.callSync("leer_tipo_incidente");
 	} catch (ex) {

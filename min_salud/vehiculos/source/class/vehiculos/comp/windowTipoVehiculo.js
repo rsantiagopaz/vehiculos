@@ -147,7 +147,7 @@ qx.Class.define("vehiculos.comp.windowTipoVehiculo",
 			if (enviar) {
 				var p = {};
 				p.cambios = cambios;
-				var rpc = new qx.io.remote.Rpc("services/", "comp.Parametros");
+				var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Parametros");
 				try {
 					var resultado = rpc.callSync("escribir_tipo_vehiculo", p);
 				} catch (ex) {
@@ -176,7 +176,7 @@ qx.Class.define("vehiculos.comp.windowTipoVehiculo",
 
 		
 		
-		var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+		var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 		try {
 			var resultado = rpc.callSync("autocompletarTipo_vehiculo", {texto: ""});
 		} catch (ex) {

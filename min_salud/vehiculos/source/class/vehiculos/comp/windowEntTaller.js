@@ -59,7 +59,7 @@ qx.Class.define("vehiculos.comp.windowEntTaller",
 			p.observa = txtObserva.getValue();
 			p.entsal_estado = rowDataEntSal.estado;
 			
-			var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 			rpc.addListener("completed", function(e){
 				var data = e.getData();
 				

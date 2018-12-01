@@ -232,7 +232,7 @@ qx.Class.define("vehiculos.comp.windowSalTaller",
 			p.model = tableModelSal.getDataAsMapArray();
 			p.movimiento_estado = rowDataMovimiento.estado;
 			
-			var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+			var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 			rpc.addListener("completed", function(e){
 				btnCancelar.execute();
 				
@@ -264,7 +264,7 @@ qx.Class.define("vehiculos.comp.windowSalTaller",
 									p.id_movimiento = rowDataMovimiento.id_movimiento;
 									p.movimiento_estado = rowDataMovimiento.estado;
 
-									var rpc = new qx.io.remote.Rpc("services/", "comp.Vehiculo");
+									var rpc = new vehiculos.comp.rpc.Rpc("services/", "comp.Vehiculo");
 									rpc.addListener("completed", function(e){
 										btnCancelar.execute();
 										

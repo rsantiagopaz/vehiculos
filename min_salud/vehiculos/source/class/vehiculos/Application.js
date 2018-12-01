@@ -92,6 +92,11 @@ qx.Class.define("vehiculos.Application",
       doc.set({blockerColor: '#bfbfbf', blockerOpacity: 0.4});
       
       
+	var loading = this.loading = new componente.comp.ui.ramon.image.Loading("vehiculos/loading66.gif");
+	
+	vehiculos.comp.rpc.Rpc.LOADING = loading;
+      
+      
       
       var p = {};
       p.organismo_area_id = this.login.organismo_area_id;
